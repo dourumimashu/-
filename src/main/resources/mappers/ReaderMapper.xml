@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gec.dao.ReaderDao">
+    <select id="getAllReader" resultType="com.gec.entity.Reader">
+        select * from reader_info
+    </select>
+
+    <insert id="addReaderSubmit" >
+        insert into reader_info(readerNumber,username,realName,sex,birthday,tel,email) values (#{readerNumber},#{username},#{realName},#{sex},#{birthday},#{tel},#{email})
+    </insert>
+
+    <delete id="deleteReader">
+        delete from reader_info where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+    <update id="updateReader">
+        update reader_info set readerNumber=#{readerNumber},username=#{username},realName=#{realName},sex=#{sex},birthday=#{birthday},tel=#{tel},email=#{email} where id=#{id}
+    </update>
+
+    <select id="queryReaderInfoById" resultType="com.gec.entity.Reader">
+        select * from reader_info where id=#{id}
+    </select>
+
+    <select id="searchReader" resultType="com.gec.entity.Reader">
+        select * from reader_info
+        <where>
+            <if test="readerNumber!=null">
+                and readerNumber like #{readerNumber}
+            </if>
+            <if test="username!=null">
+                and username like #{username}
+            </if>
+            <if test="tel!=null">
+                and tel like #{tel}
+            </if>
+        </where>
+    </select>
+</mapper>

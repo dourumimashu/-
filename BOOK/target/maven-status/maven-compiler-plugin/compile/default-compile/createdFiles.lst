@@ -1,0 +1,6 @@
+com\gec\controller\BookController.class
+com\gec\dao\BookDao.class
+com\gec\dao\BookDaoImpl.class
+com\gec\pojo\User.class
+com\gec\service\BookService.class
+com\gec\service\BookServiceImpl.class

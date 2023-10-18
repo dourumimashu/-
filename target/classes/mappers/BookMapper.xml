@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gec.dao.BookDao">
+
+    <resultMap id="BookMap" type="com.gec.entity.Book">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="author" column="author"/>
+        <result property="publish" column="publish"/>
+        <result property="isbn" column="isbn"/>
+        <result property="introduction" column="introduction"/>
+        <result property="language" column="language"/>
+        <result property="price" column="price"/>
+        <result property="publish_date" column="publish_date"/>
+        <result property="type_id" column="type_id"/>
+        <result property="status" column="status"/>
+        <association property="typeInfo" javaType="com.gec.entity.Type">
+            <result property="id" column="tid"/>
+            <result property="name" column="tname"/>
+            <result property="remarks" column="remarks"/>
+        </association>
+    </resultMap>
+
+    <select id="getAllBook" resultMap="BookMap">
+        select b.*,t.id as tid,t.name as tname
+        from book_info b,type_info t
+        where b.type_id=t.id
+    </select>
+
+
+    <select id="getType" resultType="com.gec.entity.Type">
+        select * from type_info
+    </select>
+
+    <insert id="addBookSubmit">
+        insert into book_info(name,isbn,type_id,author,publish,language,price,publish_date,introduction) values(#{name},#{isbn},#{type_id},#{author},#{publish},#{language},#{price},#{publish_date},#{introduction})
+    </insert>
+
+    <delete id="deleteBook">
+        delete from book_info where id in
+        <foreach collection="list" item="id" open="(" separator=","  close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <update id="updateBook">
+        update book_info set name=#{name},isbn=#{isbn},type_id=#{type_id},author=#{author},publish=#{publish},language=#{language},price=#{price},publish_date=#{publish_date},introduction=#{introduction} where id = #{id}
+    </update>
+
+    <select id="queryBookById" resultType="com.gec.entity.Book">
+        select * from book_info where id=#{id}
+    </select>
+
+    <select id="searchBook" resultMap="BookMap" >
+        select b.*,t.id as tid,t.name as tname from book_info b,type_info t where b.type_id=t.id
+        <if test="isbn!=null">
+            and isbn like #{isbn}
+        </if>
+        <if test="name!=null">
+            and name like #{name}
+        </if>
+        <if test="type_id">
+            and type_id = t.id #{type_id}
+        </if>
+    </select>
+</mapper>

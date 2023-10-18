@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gec.dao.AdminDao">
+    <select id="getAdminByUP" resultType="com.gec.entity.Admin">
+        select * from admin where username=#{username} and password=#{password}
+    </select>
+
+    <select id="getAllAdmin"  resultType="com.gec.entity.Admin">
+        select * from admin
+    </select>
+    <insert id="addAdminSubmit" >
+        insert into admin(username,password,adminType) values (#{username},#{password},#{adminType})
+    </insert>
+    <delete id="deleteAdminByIds">
+        delete from admin where id=#{id}
+    </delete>
+    <delete id="deleteAdmin">
+        delete from admin where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+    <update id="updateAdmin">
+      update admin set password=#{newPwd} where id=#{id}
+    </update>
+
+    <select id="searchAdmin" resultType="com.gec.entity.Admin">
+        select * from admin
+        <where>
+            <if test="username!=null">
+                and username like #{username}
+            </if>
+            <if test="adminType!=-1">
+                and adminType=#{adminType}
+            </if>
+        </where>
+    </select>
+
+</mapper>

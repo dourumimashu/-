@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gec.dao.LendDao">
+
+
+    <resultMap id="LendMap" type="com.gec.entity.Lend">
+        <result property="id" column="id"/>
+        <result property="bookId" column="bookId"/>
+        <result property="readerId" column="readerId"/>
+        <result property="lendDate" column="lendDate"/>
+        <result property="backDate" column="backDate"/>
+        <result property="backType" column="backType"/>
+        <result property="exceptRemarks" column="exceptRemarks"/>
+        <association property="bookInfo" javaType="com.gec.entity.Book">
+            <result property="id" column="bid"/>
+            <result property="name" column="name"/>
+        </association>
+        <association property="readerInfo" javaType="com.gec.entity.Reader">
+            <result property="readerNumber" column="rid"/>
+            <result property="realName" column="username"/>
+        </association>
+    </resultMap>
+
+
+
+
+    <select id="getAllLend" resultMap="LendMap">
+        select l.*,b.name,r.id as rid,r.username
+        from lend_list l, book_info b,reader_info r
+        where l.bookId=b.id
+        and l.readerId=r.id
+    </select>
+
+    <insert id="addLend">
+        insert into lend_list(bookId, readerId, lendDate,backDate,backType, exceptRemarks) values(#{bookId},#{readerId},#{lendDate},#{backDate},#{backType},#{exceptRemarks})
+    </insert>
+
+
+    <delete id="deleteLendListByIds">
+        delete from lend_list where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+
+    <insert id="backLendListByIds">
+        insert into lend_list(backDate) values(#{backDate})
+    </insert>
+</mapper>

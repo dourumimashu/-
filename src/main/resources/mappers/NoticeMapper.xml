@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gec.dao.NoticeDao">
+    <select id="getAllNotice" resultType="com.gec.entity.Notice">
+        select * from notice
+    </select>
+    <select id="getAllNotice2" resultType="com.gec.entity.Notice">
+        select * from notice
+    </select>
+    <insert id="addNoticeSubmit" >
+        insert into notice(id,topic,content,author,createDate) values (#{id},#{topic},#{content},#{author},#{createDate})
+    </insert>
+
+    <delete id="deleteNotice">
+        delete from notice where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+    <select id="searchNotice" resultType="com.gec.entity.Notice">
+        select * from notice
+        <where>
+            <if test="topic!=null">
+                and topic like #{topic}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryNoticeInfoById" resultType="com.gec.entity.Notice">
+        select * from notice where id=#{id}
+    </select>
+</mapper>
